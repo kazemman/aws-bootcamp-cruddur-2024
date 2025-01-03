@@ -1,6 +1,7 @@
 # Week 0 — Billing and Architecture
 
 1.Destroy your root account credentials, Set MFA, IAM role
+
 I did this by loging in to my root user and then I deleted all my security acess keys.
 I changed my root password to a temporary password just in case I need it later on.
 I created an IAM role, loggged on into the AWS Management Console with administrative IAM credentials. I later accessed the IAM dashboard and select "Roles" from the navigation pane. I clicked on "Create role" and choose the trusted entity type, which could be another AWS account for cross-account access or the same account for internal roles. I Attach appropriate permissions policies that define the role's actions in my case I created "Administrative access".I assigned a name by EMK.
