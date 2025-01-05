@@ -107,3 +107,7 @@ services:
 I managed to Launch an EC2 instance that has docker installed, and pull a container to demonstrate I can run my own docker processes.
 
 ![Screenshot 2025-01-05 120203](https://github.com/user-attachments/assets/43489e78-66bf-4dc2-bad4-e89a4b8e60ef)
+
+Implement a healthcheck in the V3 Docker compose file
+
+![Screenshot 2025-01-05 150056](https://github.com/user-attachments/assets/091cb7ce-6748-45c6-a629-afee623a361e)
