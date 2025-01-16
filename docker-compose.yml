@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  backend-flask:
+    build: ./backend-flask
+    environment:
+      FRONTEND_URL: "https://3000-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+      BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+      OTEL_SERVICE_NAME: 'backend-flask'
+      OTEL_EXPORTER_OTLP_ENDPOINT: "https://api.honeycomb.io"
+      OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
+      AWS_XRAY_URL: "*4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}*"
+      AWS_XRAY_DAEMON_ADDRESS: "xray-daemon:2000"
+    ports:
+      - "4567:4567"
+    volumes:
+      - ./backend-flask:/backend-flask
+    depends_on:
+      - xray-daemon
+    networks:
+      - internal-network
+
+  frontend-react-js:
+    build: ./frontend-react-js
+    environment:
+      REACT_APP_BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend-react-js:/frontend-react-js
+    networks:
+      - internal-network
+
+  xray-daemon:
+    image: "amazon/aws-xray-daemon"
+    environment:
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}" # Use environment variables for secrets
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}" # Avoid hardcoding
+      AWS_REGION: "us-east-1"
+    command:
+      - "--bind=0.0.0.0:2000"
+      - "--region=us-east-1"
+    ports:
+      - "2000:2000/udp"
+    networks:
+      - internal-network
+
+networks: 
+  internal-network:
+    driver: bridge
